@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Environment Variables & Secrets (NUNCA COMMITE O ARQUIVO .env)
+.env
+.env.local
+*.env
+
+# IDEs & Editor Configuration
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Output Docs (Opcional: descomente se desejar versionar apenas os arquivos markdown de origem)
+# *.docx
