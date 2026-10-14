@@ -21,8 +21,8 @@
 Em equipes com múltiplos desenvolvedores ou múltiplos agentes de inteligência artificial trabalhando em paralelo em branches Git separadas (ex: `feature/US-010` e `feature/US-025`), a documentação técnica centralizada tradicionalmente sofre com **conflitos frequentes de merge (`merge conflicts`)**.
 
 O **DocOps Engine** implementa uma **Arquitetura de Documentação Modular Desacoplada**:
-1. **Histórias de Usuário Isoladas (`historico_us/`)**: Cada entrega ou correção de bug é documentada em seu próprio arquivo individual (`US-XXX_slug.md`). O Git mescla novos arquivos automaticamente, gerando **ZERO conflito de merge**.
-2. **Tópicos Arquiteturais Modulares (`topicos/`)**: Cada domínio técnico (Banco de Dados, Arquitetura, Setup) possui seu arquivo isolado.
+1. **Histórias de Usuário Isoladas (`docs/user_stories/`)**: Cada entrega ou correção de bug é documentada em seu próprio arquivo individual (`US-XXX_slug.md`). O Git mescla novos arquivos automaticamente, gerando **ZERO conflito de merge**.
+2. **Tópicos Arquiteturais Modulares (`docs/topics/`)**: Cada domínio técnico (Banco de Dados, Arquitetura, Setup) possui seu arquivo isolado.
 3. **Compilador Automatizado (`scripts/main.py`)**: Reúne incrementalmente todos os módulos, gera a tabela de rastreabilidade e compila tanto o arquivo Markdown consolidado (Single Source of Truth para IA) quanto o documento oficial Microsoft Word (`.docx`) com estilização profissional e tipografia corporativa.
 4. **Notificação Automática aos Stakeholders (`scripts/send_docs.py`)**: Disparo de e-mail com layout HTML corporativo contendo o resumo da entrega e o arquivo Word em anexo.
 
@@ -49,17 +49,17 @@ docops-engine/
 │   └── templates/                   # Templates visuais desacoplados
 │       └── email_notification.html  # Layout HTML responsivo com placeholders
 │
-└── documentacao/                    # Conteúdo da documentação do seu projeto
+└── docs/                            # Conteúdo da documentação do seu projeto
     ├── Technical_Documentation.md   # [Gerado] Markdown consolidado oficial
     ├── Technical_Documentation.docx # [Gerado] Word oficial estilizado
     │
-    ├── topicos/                     # Tópicos arquiteturais isolados
+    ├── topics/                      # Tópicos arquiteturais isolados
     │   ├── 1_architecture.md        # Visão geral, camadas, ADRs
     │   ├── 2_database.md            # Modelagem, tabelas, migrações
     │   ├── 3_setup.md               # Pré-requisitos e setup do ambiente
     │   └── 4_skills.md              # Catálogo de ferramentas e IA
     │
-    └── historico_us/                # Histórico de histórias de usuário (1 arquivo por US)
+    └── user_stories/                # Histórico de histórias de usuário (1 arquivo por US)
         └── US-001_initial_setup.md
 ```
 
@@ -173,7 +173,7 @@ python scripts/main.py --send-email
 
 ### 3. Argumentos Opcionais do CLI
 O script `main.py` oferece suporte a parâmetros adicionais:
-- `--doc-dir <caminho>`: Especifica uma pasta personalizada contendo `topicos/` e `historico_us/`.
+- `--doc-dir <caminho>`: Especifica uma pasta personalizada contendo `topics/` e `user_stories/`.
 - `--output-name <nome>`: Modifica o nome do arquivo compilado gerado (ex: `--output-name Documentacao_Projeto_X`).
 - `--project-name <nome>`: Altera o nome do projeto exibido nos cabeçalhos e no e-mail.
 
@@ -265,7 +265,7 @@ Você pode personalizar os nomes de exibição no `.env` ou diretamente via argu
 ---
 
 ### 4. Como Customizar a Estrutura de Tópicos
-A documentação aceita qualquer estrutura de módulos técnicos. Basta adicionar ou renomear arquivos em `documentacao/topicos/`:
+A documentação aceita qualquer estrutura de módulos técnicos. Basta adicionar ou renomear arquivos em `docs/topics/`:
 - `1_visao_geral.md`
 - `2_arquitetura_solucao.md`
 - `3_modelo_dados.md`
@@ -276,9 +276,9 @@ O compilador lê automaticamente todos os arquivos que começam com números (`[
 
 ---
 
-## 📝 Como Adicionar Novas Histórias de Usuário (`historico_us/`)
+## 📝 Como Adicionar Novas Histórias de Usuário (`docs/user_stories/`)
 
-Para cada nova entrega, crie um arquivo com a convenção `US-XXX_slug.md` dentro de `documentacao/historico_us/`:
+Para cada nova entrega, crie um arquivo com a convenção `US-XXX_slug.md` dentro de `docs/user_stories/`:
 
 ```markdown
 ### US-002: Implementação de Autenticação JWT
@@ -307,18 +307,18 @@ Ao rodar `python scripts/main.py`, a tabela geral de rastreabilidade é atualiza
 Esta pasta pode ser reaproveitada como uma **Skill de IA** em ferramentas como **Google Antigravity**, **Cursor AI**, **Claude Code**, **GitHub Copilot** ou **Windsurf**:
 
 1. **Copiar os Arquivos:**
-   Copie a pasta `scripts/`, a pasta `documentacao/` e o arquivo `SKILL.md` para a pasta de skills do seu projeto (por exemplo, `.ai/skills/documentacao/` ou `.cursor/skills/documentacao/`).
+   Copie a pasta `scripts/`, a pasta `docs/` e o arquivo `SKILL.md` para a pasta de skills do seu projeto (por exemplo, `.ai/skills/docops/` ou `.cursor/skills/docops/`).
 
 2. **O que Personalizar no `SKILL.md` para o seu Projeto (Checklist de Adaptação):**
    O arquivo `SKILL.md` já vem com uma seção dedicada no topo (`HOW TO ADAPT THIS SKILL FOR YOUR REPOSITORY`). Revise estes pontos:
-   - **Caminho dos Scripts (Regra 3 e Passo 5):** Caso coloque os scripts em uma subpasta como `.ai/skills/documentacao/scripts/`, ajuste o comando no `SKILL.md` para refletir esse caminho (ex: `python .ai/skills/documentacao/scripts/main.py --no-email`).
-   - **Módulos e Tópicos (Seção 1):** Ajuste os nomes dos tópicos em `documentacao/topicos/` para os domínios do seu projeto (ex: `1_architecture.md`, `2_database.md`, `3_apis.md`).
+   - **Caminho dos Scripts (Regra 3 e Passo 5):** Caso coloque os scripts em uma subpasta como `.ai/skills/docops/scripts/`, ajuste o comando no `SKILL.md` para refletir esse caminho (ex: `python .ai/skills/docops/scripts/main.py --no-email`).
+   - **Módulos e Tópicos (Seção 1):** Ajuste os nomes dos tópicos em `docs/topics/` para os domínios do seu projeto (ex: `1_architecture.md`, `2_database.md`, `3_apis.md`).
    - **Template de US (Seção 3):** Ajuste as pastas de alteração de código (`Backend Changes`, `Frontend Changes`, etc.) para os diretórios reais do seu projeto.
    - **Gatilho de Execução (Seção 4):** Defina se a documentação deve ser gerada automaticamente a cada US aprovada ou apenas antes de abrir um Pull Request.
 
 3. **Comportamento Autônomo do Agente:**
    O agente de IA lerá o `SKILL.md` e saberá exatamente:
-   - Que deve criar arquivos isolados em `documentacao/historico_us/US-XXX.md`.
+   - Que deve criar arquivos isolados em `docs/user_stories/US-XXX.md`.
    - Que nunca deve alterar arquivos de US de outros desenvolvedores (garantindo zero conflitos no Git).
    - Que deve compilar automaticamente a documentação ao finalizar cada tarefa através do comando `python scripts/main.py --no-email`.
 

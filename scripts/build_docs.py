@@ -51,8 +51,8 @@ class BuildDocs:
 
     def compile_modular_markdown(self, target_doc_dir=None):
         doc_dir = target_doc_dir or self.doc_dir
-        topicos_dir = os.path.join(doc_dir, 'topicos')
-        us_dir = os.path.join(doc_dir, 'historico_us')
+        topics_dir = os.path.join(doc_dir, 'topics') if os.path.exists(os.path.join(doc_dir, 'topics')) else os.path.join(doc_dir, 'topicos')
+        us_dir = os.path.join(doc_dir, 'user_stories') if os.path.exists(os.path.join(doc_dir, 'user_stories')) else os.path.join(doc_dir, 'historico_us')
 
         header = (
             f"# {self.doc_title} - {self.project_name}\n\n"
@@ -62,7 +62,7 @@ class BuildDocs:
 
         content_parts = [header]
 
-        topic_files = sorted(glob.glob(os.path.join(topicos_dir, '[0-9]_*.md')))
+        topic_files = sorted(glob.glob(os.path.join(topics_dir, '[0-9]_*.md')))
         for path in topic_files:
             with open(path, 'r', encoding='utf-8') as f:
                 content_parts.append(f.read().strip() + "\n\n---\n\n")
@@ -100,7 +100,7 @@ class BuildDocs:
         if us_details:
             topico_us += "\n\n".join(us_details) + "\n"
         else:
-            topico_us += "*[No user stories recorded yet in historico_us/]*\n"
+            topico_us += "*[No user stories recorded yet in user_stories/]*\n"
 
         content_parts.append(topico_us)
 

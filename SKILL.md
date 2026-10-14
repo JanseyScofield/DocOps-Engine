@@ -1,6 +1,6 @@
 ---
 name: docops-engine
-description: DocOps Engine is a modular, AI-driven technical documentation system. Eliminates Git merge conflicts across concurrent feature branches using decoupled markdown modules (isolated user story logs in historico_us/ and architectural topics in topicos/). Compiles both a single source of truth Markdown master document and styled Word (.docx) files, with automated stakeholder email alerts.
+description: DocOps Engine is a modular, AI-driven technical documentation system. Eliminates Git merge conflicts across concurrent feature branches using decoupled markdown modules (isolated user story logs in docs/user_stories/ and architectural topics in docs/topics/). Compiles both a single source of truth Markdown master document and styled Word (.docx) files, with automated stakeholder email alerts.
 ---
 
 # ⚙️ DocOps Engine (Git-Optimized Documentation Skill)
@@ -17,7 +17,7 @@ When importing DocOps Engine into your project (inside `.ai/skills/docops-engine
    - Defined as `name: docops-engine`. Keep this identifier or adjust if your agent catalog uses a specific convention.
 2. **Execution Path (Rule 3 & Step 5):**
    - Update the execution path to match where your scripts are located (e.g., `python scripts/main.py --no-email` or `python .ai/skills/docops-engine/scripts/main.py --no-email`).
-3. **Architectural Topics (`topicos/`):**
+3. **Architectural Topics (`docs/topics/`):**
    - In Section 1, customize the topic filenames to match your architecture (e.g., `1_architecture.md`, `2_database.md`, `3_setup.md`, `4_security.md`, `5_api_reference.md`).
 4. **User Story Template (Section 3):**
    - Customize the tech-stack sections (`Backend Changes`, `Frontend Changes`, `Mobile Changes`, etc.) to match your actual repositories and directories.
@@ -26,23 +26,23 @@ When importing DocOps Engine into your project (inside `.ai/skills/docops-engine
 
 ---
 
-## 1. Modular Directory Structure in `documentacao/`
+## 1. Modular Directory Structure in `docs/`
 
-All documentation source files must reside in the `documentacao/` folder:
+All documentation source files must reside in the `docs/` folder:
 
 ```text
 <your-project-root>/
-├── documentacao/
+├── docs/
 │   ├── Technical_Documentation.md        # Compiled Markdown master doc (Single Source of Truth for AI)
 │   ├── Technical_Documentation.docx      # Compiled Microsoft Word master doc (Official Stakeholder Doc)
 │   │
-│   ├── topicos/                          # Core Architectural Modules (Domain Isolated)
+│   ├── topics/                           # Core Architectural Modules (Domain Isolated)
 │   │   ├── 1_architecture.md             # Topic 1: System Overview, Layers & ADRs
 │   │   ├── 2_database.md                 # Topic 2: Database Schema, Entities & Migrations
 │   │   ├── 3_setup.md                    # Topic 3: Project Setup, Prerequisites & Execution
 │   │   └── 4_skills.md                   # Topic 4: Tooling & AI Skills Catalog
 │   │
-│   └── historico_us/                     # Individual User Story / Bugfix Logs (ZERO Git Merge Conflicts)
+│   └── user_stories/                     # Individual User Story / Bugfix Logs (ZERO Git Merge Conflicts)
 │       ├── US-001_authentication.md
 │       ├── US-002_data_pipeline.md
 │       └── US-003_dashboard_analytics.md
@@ -54,13 +54,13 @@ All documentation source files must reside in the `documentacao/` folder:
 
 When two or more developers or AI agents work concurrently on parallel branches (e.g., `feature/US-010` and `feature/US-025`), enforce these rules:
 
-### Rule 1: Isolated User Story Files (`historico_us/`)
-- Every feature, User Story, or bugfix must be documented in its **own standalone file** inside `documentacao/historico_us/US-XXX_slug.md`.
+### Rule 1: Isolated User Story Files (`docs/user_stories/`)
+- Every feature, User Story, or bugfix must be documented in its **own standalone file** inside `docs/user_stories/US-XXX_slug.md`.
 - **Why?** Git merges distinct new files automatically without collision. When concurrent branches are merged into `main` or `develop`, the merge completes with **ZERO merge conflicts**.
 
-### Rule 2: Modular Topic Updates (`topicos/`)
-- If a feature modifies the database (e.g., migrations/schemas), update only `topicos/2_database.md`.
-- If a feature introduces an architectural pattern or ADR, update only `topicos/1_architecture.md`.
+### Rule 2: Modular Topic Updates (`docs/topics/`)
+- If a feature modifies the database (e.g., migrations/schemas), update only `docs/topics/2_database.md`.
+- If a feature introduces an architectural pattern or ADR, update only `docs/topics/1_architecture.md`.
 - Never modify unrelated topic files during a feature implementation.
 
 ### Rule 3: Single-Command Compilation & CLI Email Control
@@ -78,9 +78,9 @@ python scripts/main.py --send-email
 
 ---
 
-## 3. Template for Individual User Story Files (`historico_us/US-XXX.md`)
+## 3. Template for Individual User Story Files (`docs/user_stories/US-XXX.md`)
 
-When creating a new file in `documentacao/historico_us/`, use this standardized schema:
+When creating a new file in `docs/user_stories/`, use this standardized schema:
 
 ```markdown
 ### US-XXX: [User Story Title or Bugfix Description]
@@ -107,8 +107,8 @@ When creating a new file in `documentacao/historico_us/`, use this standardized 
 
 1. **Trigger**: Triggered automatically upon completion or code-review approval of a user story or bugfix.
 2. **Review Changes**: Inspect the Git diff and commit details of the implementation.
-3. **Update Core Topics (if applicable)**: Edit relevant files in `documentacao/topicos/` (e.g., database, architecture).
-4. **Create US File**: Generate `documentacao/historico_us/US-XXX_[slug].md` using the template above.
+3. **Update Core Topics (if applicable)**: Edit relevant files in `docs/topics/` (e.g., database, architecture).
+4. **Create US File**: Generate `docs/user_stories/US-XXX_[slug].md` using the template above.
 5. **Recompile Master Documents**:
    ```bash
    python scripts/main.py --no-email

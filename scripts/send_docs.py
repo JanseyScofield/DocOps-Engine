@@ -21,7 +21,7 @@ class SendDocs:
         self.us_info = self.get_latest_us_details()
 
     def get_latest_us_details(self):
-        us_dir = os.path.join(self.doc_dir, 'historico_us')
+        us_dir = os.path.join(self.doc_dir, 'user_stories') if os.path.exists(os.path.join(self.doc_dir, 'user_stories')) else os.path.join(self.doc_dir, 'historico_us')
         
         us_files = sorted(glob.glob(os.path.join(us_dir, 'US-*.md')), key=os.path.getmtime, reverse=True)
         if us_files:

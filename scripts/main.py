@@ -33,7 +33,7 @@ def parse_args():
         '--doc-dir',
         dest='doc_dir',
         default=None,
-        help='Custom path to documentation folder containing topicos/ and historico_us/.'
+        help='Custom path to documentation folder containing topics/ and user_stories/.'
     )
     parser.add_argument(
         '--output-name',
@@ -57,23 +57,26 @@ def resolve_doc_dir(cli_doc_dir, skill_dir):
     if env_dir and os.path.isdir(env_dir):
         return os.path.abspath(env_dir)
 
-    cwd_candidate = os.path.abspath(os.path.join(os.getcwd(), 'documentacao'))
-    if os.path.isdir(cwd_candidate):
-        return cwd_candidate
+    for name in ('docs', 'documentacao'):
+        candidate = os.path.abspath(os.path.join(os.getcwd(), name))
+        if os.path.isdir(candidate):
+            return candidate
 
-    skill_doc_candidate = os.path.abspath(os.path.join(skill_dir, 'documentacao'))
-    if os.path.isdir(skill_doc_candidate):
-        return skill_doc_candidate
+    for name in ('docs', 'documentacao'):
+        candidate = os.path.abspath(os.path.join(skill_dir, name))
+        if os.path.isdir(candidate):
+            return candidate
 
-    parent_repo_candidate = os.path.abspath(os.path.join(skill_dir, '..', '..', '..', 'documentacao'))
-    if os.path.isdir(parent_repo_candidate):
-        return parent_repo_candidate
+    for name in ('docs', 'documentacao'):
+        parent_candidate = os.path.abspath(os.path.join(skill_dir, '..', '..', '..', name))
+        if os.path.isdir(parent_candidate):
+            return parent_candidate
 
-    sub_repo_candidate = os.path.abspath(os.path.join(skill_dir, '..', '..', 'documentacao'))
-    if os.path.isdir(sub_repo_candidate):
-        return sub_repo_candidate
+        sub_candidate = os.path.abspath(os.path.join(skill_dir, '..', '..', name))
+        if os.path.isdir(sub_candidate):
+            return sub_candidate
 
-    return skill_doc_candidate
+    return os.path.abspath(os.path.join(skill_dir, 'docs'))
 
 def load_environment(skill_dir, doc_dir):
     candidates = [
@@ -96,8 +99,8 @@ def main():
 
     doc_dir = resolve_doc_dir(args.doc_dir, skill_dir)
     
-    os.makedirs(os.path.join(doc_dir, 'topicos'), exist_ok=True)
-    os.makedirs(os.path.join(doc_dir, 'historico_us'), exist_ok=True)
+    os.makedirs(os.path.join(doc_dir, 'topics'), exist_ok=True)
+    os.makedirs(os.path.join(doc_dir, 'user_stories'), exist_ok=True)
 
     load_environment(skill_dir, doc_dir)
 

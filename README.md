@@ -22,8 +22,8 @@ When multiple developers or autonomous AI coding agents work concurrently on sep
 
 **DocOps Engine** implements a **Decoupled Modular Documentation Architecture**:
 
-1. **Isolated User Story Files (`historico_us/`)**: Every feature, user story, or bugfix is documented in its own standalone file (`US-XXX_slug.md`). Because Git merges distinct new files automatically without collisions, combining parallel branches results in **ZERO merge conflicts**.
-2. **Modular Architecture Topics (`topicos/`)**: Core architectural domains (Database, Infrastructure, System Overview, AI Skills) are isolated into independent topic files.
+1. **Isolated User Story Files (`docs/user_stories/`)**: Every feature, user story, or bugfix is documented in its own standalone file (`US-XXX_slug.md`). Because Git merges distinct new files automatically without collisions, combining parallel branches results in **ZERO merge conflicts**.
+2. **Modular Architecture Topics (`docs/topics/`)**: Core architectural domains (Database, Infrastructure, System Overview, AI Skills) are isolated into independent topic files.
 3. **Automated Single-Step Compiler (`scripts/main.py`)**: Assembles all topics and user stories, creates an automatic traceability matrix, and compiles both a consolidated Markdown file (Single Source of Truth for AI) and an official Microsoft Word (`.docx`) document with corporate styling and zebra-striped tables.
 4. **Automated Stakeholder Notifications (`scripts/send_docs.py`)**: Optionally sends responsive HTML email notifications via SMTP with the latest delivery summary and the generated `.docx` file attached.
 
@@ -50,17 +50,17 @@ docops-engine/
 │   └── templates/                   # Decoupled visual templates
 │       └── email_notification.html  # Responsive HTML template with placeholders
 │
-└── documentacao/                    # Project documentation workspace
+└── docs/                            # Project documentation workspace
     ├── Technical_Documentation.md   # [Generated] Consolidated Markdown master doc
     ├── Technical_Documentation.docx # [Generated] Styled Microsoft Word master doc
     │
-    ├── topicos/                     # Isolated architectural topics
+    ├── topics/                      # Isolated architectural topics
     │   ├── 1_architecture.md        # Architecture overview & ADRs
     │   ├── 2_database.md            # Database schema, tables & migrations
     │   ├── 3_setup.md               # Setup, prerequisites & run instructions
     │   └── 4_skills.md              # AI skills & tooling catalog
     │
-    └── historico_us/                # Individual user story logs (1 file per US)
+    └── user_stories/                # Individual user story logs (1 file per US)
         └── US-001_initial_setup.md
 ```
 
@@ -173,7 +173,7 @@ python scripts/main.py --send-email
 ```
 
 ### 3. Optional CLI Flags
-- `--doc-dir <path>`: Custom path to a `documentacao/` folder containing `topicos/` and `historico_us/`.
+- `--doc-dir <path>`: Custom path to a `docs/` folder containing `topics/` and `user_stories/`.
 - `--output-name <name>`: Custom base name for generated files (e.g. `--output-name Core_Architecture`).
 - `--project-name <name>`: Custom project title for headers and email templates.
 
@@ -265,7 +265,7 @@ Configure custom naming either via `.env` or terminal flags:
 ---
 
 ### 4. Customizing Architectural Topic Structure
-You can structure your documentation to match any domain. Simply add or rename files in `documentacao/topicos/`:
+You can structure your documentation to match any domain. Simply add or rename files in `docs/topics/`:
 - `1_overview.md`
 - `2_architecture_decisions.md`
 - `3_data_models.md`
@@ -276,9 +276,9 @@ The compiler automatically scans all files starting with digits (`[0-9]_*.md`) a
 
 ---
 
-## 📝 Documenting a New User Story (`historico_us/`)
+## 📝 Documenting a New User Story (`docs/user_stories/`)
 
-For each completed feature or bugfix, create a file named `US-XXX_slug.md` inside `documentacao/historico_us/`:
+For each completed feature or bugfix, create a file named `US-XXX_slug.md` inside `docs/user_stories/`:
 
 ```markdown
 ### US-002: JWT Authentication Implementation
@@ -307,18 +307,18 @@ Running `python scripts/main.py` automatically updates the traceability table an
 This skill is fully portable and compatible with modern AI development environments, such as **Google Antigravity**, **Cursor AI**, **Claude Code**, **GitHub Copilot**, and **Windsurf**:
 
 1. **Drop-in Installation:**
-   Copy the `scripts/` folder, `documentacao/` folder, and `SKILL.md` into your target repository's skills directory (e.g., `.ai/skills/documentacao/` or `.cursor/skills/documentacao/`).
+   Copy the `scripts/` folder, `docs/` folder, and `SKILL.md` into your target repository's skills directory (e.g., `.ai/skills/docops-engine/` or `.cursor/skills/docops-engine/`).
 
 2. **What to Customize in `SKILL.md` for Your Project (Setup Checklist):**
-   The `SKILL.md` file comes with a dedicated top section (`HOW TO ADAPT THIS SKILL FOR YOUR REPOSITORY`). Review these items:
-   - **Script Execution Path (Rule 3 & Step 5):** If scripts are placed in a subfolder such as `.ai/skills/documentacao/scripts/`, update the command in `SKILL.md` accordingly (e.g., `python .ai/skills/documentacao/scripts/main.py --no-email`).
-   - **Architectural Topics (Section 1):** Tailor the topic files in `documentacao/topicos/` to match your system domains (e.g., `1_architecture.md`, `2_database.md`, `3_apis.md`).
+   The `SKILL.md` file comes with a dedicated top section (`HOW TO ADAPT DOCOPS ENGINE FOR YOUR REPOSITORY`). Review these items:
+   - **Script Execution Path (Rule 3 & Step 5):** If scripts are placed in a subfolder such as `.ai/skills/docops-engine/scripts/`, update the command in `SKILL.md` accordingly (e.g., `python .ai/skills/docops-engine/scripts/main.py --no-email`).
+   - **Architectural Topics (Section 1):** Tailor the topic files in `docs/topics/` to match your system domains (e.g., `1_architecture.md`, `2_database.md`, `3_apis.md`).
    - **US Template (Section 3):** Customize directory paths under code changes (`Backend Changes`, `Frontend Changes`, etc.) to match your actual repo structure.
    - **Execution Triggers (Section 4):** Define whether docs should compile per approved user story or right before opening a Pull Request.
 
 3. **Autonomous Execution by AI Agents:**
    AI agents will automatically follow `SKILL.md` guidelines:
-   - Create isolated files in `documentacao/historico_us/US-XXX.md`.
+   - Create isolated files in `docs/user_stories/US-XXX.md`.
    - Never overwrite existing US files from other branches (guaranteeing zero merge conflicts in Git).
    - Run `python scripts/main.py --no-email` after passing tests to maintain up-to-date master documentation.
 

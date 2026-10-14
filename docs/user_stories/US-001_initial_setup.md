@@ -5,8 +5,8 @@
 - **Assignee:** Developer / Documenter Agent
 - **Business Goal:** Establish a decoupled modular documentation architecture to eliminate Git merge conflicts during concurrent multi-developer branches.
 - **Accepted Criteria:**
-  - [x] Create isolated topic modules inside `topicos/`.
-  - [x] Isolate individual user story notes into standalone markdown files inside `historico_us/`.
+  - [x] Create isolated topic modules inside `topics/`.
+  - [x] Isolate individual user story notes into standalone markdown files inside `user_stories/`.
   - [x] Python compiler script assembling all files into a consolidated Markdown master document.
   - [x] Automatic conversion into professional Microsoft Word (.docx) with brand headers and styled tables.
   - [x] Configurable SMTP email notifications with official document attachments for stakeholders.
@@ -16,7 +16,7 @@
   - `scripts/email_template.py`: Decoupled email renderer supporting HTML and plain-text.
   - `scripts/main.py`: CLI entrypoint with `--no-email` and `--send-email` options.
 - **Templates & Documentation Changes:**
-  - Topic blueprints in `documentacao/topicos/` and sample story in `documentacao/historico_us/`.
+  - Topic blueprints in `docs/topics/` and sample story in `docs/user_stories/`.
 - **Tests & Validation:**
   - Validated on Python 3.12 virtual environment (`.venv`).
   - Successfully generated consolidated `.md` and `.docx` documents.
